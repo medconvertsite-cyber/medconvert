@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedConvert — Medical Unit Converter for Students & Clinicians</title>
+  <meta name="description" content="Free medical unit converter for drug dosing, lab values, temperature, weight, and more. Built for medical students and healthcare professionals." />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- ══ EZOIC ══ Paste your Ezoic head code here after signing up at ezoic.com -->
+  <!-- <script src="//go.ezoic.net/ezoic/ezoic.js" type="text/javascript"></script> -->
+  <!-- ══ END EZOIC ══ -->
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #1a202c;
+      --muted: #64748b;
+      --accent: #0a5c8a;
+      --accent-light: #e8f4fd;
+      --accent2: #06785c;
+      --accent2-light: #e6f7f2;
+      --danger: #c0392b;
+      --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 20px rgba(0,0,0,0.04);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 15px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 16px;
+    }
+    .logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+    .logo-text span { color: var(--accent2); }
+    nav { display: flex; gap: 24px; }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* ── TOP AD BANNER ── */
+    .ad-banner-top {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      text-align: center;
+    }
+    .ad-slot {
+      background: #f0f4f8;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    .ad-slot::before {
+      content: '📋 Ad';
+      position: absolute;
+      top: 6px; left: 10px;
+      font-size: 10px;
+      color: #b0bec5;
+      text-transform: none;
+    }
+    .ad-banner-top .ad-slot { height: 90px; max-width: 728px; margin: 0 auto; }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {}
+
+    .hero {
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--accent);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── CATEGORY TABS ── */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 7px 16px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .tab:hover { border-color: var(--accent); color: var(--accent); }
+    .tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ── CONVERTER CARD ── */
+    .converter-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 20px;
+      animation: fadeIn .3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .converter-card h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .converter-card .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .converter-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: end;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+    }
+    .field select, .field input {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .field input:focus, .field select:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: #fff;
+    }
+    .swap-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--accent);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+    .swap-btn:hover { background: var(--accent-light); border-color: var(--accent); }
+
+    .result-box {
+      margin-top: 20px;
+      background: var(--accent-light);
+      border: 1.5px solid #bee3f8;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .result-box .result-val {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--accent);
+    }
+    .result-box .result-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .copy-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1.5px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .copy-btn:hover { background: var(--accent); color: #fff; }
+
+    /* DOSING SPECIFIC */
+    .dose-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .dose-result {
+      margin-top: 20px;
+      background: var(--accent2-light);
+      border: 1.5px solid #a7f3d0;
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+    .dose-result .dr-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #d1fae5;
+    }
+    .dose-result .dr-row:last-child { border-bottom: none; }
+    .dose-result .dr-label { font-size: 13px; color: var(--muted); }
+    .dose-result .dr-val { font-weight: 600; color: var(--accent2); font-size: 16px; }
+
+    /* ── IN-FEED AD ── */
+    .ad-infeed { margin: 20px 0; }
+    .ad-infeed .ad-slot { height: 250px; }
+
+    /* ── REFERENCE TABLE ── */
+    .ref-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+    .ref-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      padding: 8px 10px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--accent-light); }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-normal { background: #d1fae5; color: #065f46; }
+    .badge-low    { background: #fee2e2; color: #991b1b; }
+    .badge-high   { background: #fef3c7; color: #92400e; }
+
+    /* ── SIDEBAR ── */
+    aside { display: flex; flex-direction: column; gap: 20px; }
+
+    .sidebar-ad .ad-slot { height: 250px; }
+    .sidebar-ad2 .ad-slot { height: 600px; max-height: 600px; }
+
+    .tip-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .tip-card h4 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 16px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .tip-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .tip-item .tip-icon { flex-shrink: 0; font-size: 15px; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: #94a3b8;
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+    footer strong { color: var(--accent); }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #6d4c00;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .page-wrap { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .converter-grid { grid-template-columns: 1fr; }
+      .swap-btn { width: 100%; border-radius: 8px; }
+      .dose-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚕</div>
+    <div class="logo-text">Med<span>Convert</span></div>
+  </div>
+  <nav>
+    <a href="#">Converters</a>
+    <a href="#">Lab Values</a>
+    <a href="#">Dosing</a>
+    <a href="#">About</a>
+  </nav>
+</header>
+
+<!-- TOP BANNER AD (728×90) — Replace with your AdSense code -->
+<div class="ad-banner-top">
+  <!-- EZOIC AD SLOT 1 — Top Banner. Replace id with your Ezoic placeholder ID -->
+  <div id="ezoic-pub-ad-placeholder-101" class="ad-slot">
+    📋 Ad · Top Banner — Ezoic Slot 101
+  </div>
+</div>
+
+<div class="page-wrap">
+  <main>
+
+    <div class="hero">
+      <h1>Medical Unit Converter</h1>
+      <p>Fast, accurate conversions for drug dosing, lab values, temperature, weight & more. Built for medical students and clinicians.</p>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Clinical Disclaimer:</strong> This tool is for educational purposes only. Always verify calculations with your institution's pharmacy or clinical references before patient use.
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('dosing', this)">💊 Drug Dosing</button>
+      <button class="tab" onclick="showTab('units', this)">🔬 Lab Units</button>
+      <button class="tab" onclick="showTab('temp', this)">🌡️ Temperature</button>
+      <button class="tab" onclick="showTab('weight', this)">⚖️ Weight / Height</button>
+      <button class="tab" onclick="showTab('fluid', this)">💧 IV Fluid Rate</button>
+    </div>
+
+    <!-- ══ TAB: DRUG DOSING ══ -->
+    <div id="tab-dosing" class="tab-content">
+      <div class="converter-card">
+        <h2>💊 Weight-Based Drug Dosing</h2>
+        <div class="subtitle">Calculate dose from mg/kg or mcg/kg/min guidelines</div>
+        <div class="dose-grid">
+          <div class="field">
+            <label>Patient Weight</label>
+            <input type="number" id="dose-weight" placeholder="70" oninput="calcDose()" />
+          </div>
+          <div class="field">
+            <label>Weight Unit</label>
+            <select id="dose-weight-unit" onchange="calcDose()">
+              <option value="kg">kg</option>
+              <option value="lbs">lbs</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Dose</label>
+            <input type="number" id="dose-amt" placeholder="e.g. 15" oninput="calcDose()" />
+          </div>
+        </div>
+        <div class="dose-grid" style="margin-top:12px">
+          <div class="field">
+            <label>Dose Unit</label>
+            <select id="dose-unit" onchange="calcDose()">
+              <option value="mg/kg">mg/kg</option>
+              <option value="mcg/kg">mcg/kg</option>
+              <option value="units/kg">units/kg</option>
+              <option value="mg/kg/day">mg/kg/day</option>
+              <option value="mcg/kg/min">mcg/kg/min</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Doses/Day (if daily)</label>
+            <input type="number" id="dose-freq" placeholder="3" oninput="calcDose()" />
+          </div>
+          <div class="field">
+            <label>Drug (optional)</label>
+            <input type="text" id="dose-drug" placeholder="e.g. Amoxicillin" />
+          </div>
+        </div>
+
+        <div class="dose-result" id="dose-result" style="display:none">
+          <div class="dr-row">
+            <span class="dr-label">Total Dose</span>
+            <span class="dr-val" id="dr-total">—</span>
+          </div>
+          <div class="dr-row" id="dr-per-row">
+            <span class="dr-label">Per Administration</span>
+            <span class="dr-val" id="dr-per">—</span>
+          </div>
+          <div class="dr-row">
+            <span class="dr-label">Weight Used</span>
+            <span class="dr-val" id="dr-weight">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCE TABLE: Common Doses -->
+      <div class="ref-card">
+        <h3>📋 Common Paediatric Dose Reference</h3>
+        <table>
+          <thead><tr><th>Drug</th><th>Indication</th><th>Dose</th><th>Route</th><th>Max</th></tr></thead>
+          <tbody>
+            <tr><td>Amoxicillin</td><td>Otitis media</td><td>40–90 mg/kg/day ÷ 2–3</td><td>PO</td><td>3 g/day</td></tr>
+            <tr><td>Paracetamol</td><td>Analgesia/Fever</td><td>10–15 mg/kg q4–6h</td><td>PO/PR</td><td>75 mg/kg/day</td></tr>
+            <tr><td>Ibuprofen</td><td>Anti-inflammatory</td><td>5–10 mg/kg q6–8h</td><td>PO</td><td>40 mg/kg/day</td></tr>
+            <tr><td>Cefuroxime</td><td>Pneumonia</td><td>20–30 mg/kg/day ÷ 2</td><td>IV</td><td>1.5 g/dose</td></tr>
+            <tr><td>Gentamicin</td><td>Sepsis</td><td>5–7.5 mg/kg/day OD</td><td>IV</td><td>Monitor levels</td></tr>
+            <tr><td>Metronidazole</td><td>Anaerobic infx.</td><td>7.5 mg/kg q8h</td><td>IV/PO</td><td>4 g/day</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ TAB: LAB UNITS ══ -->
+    <div id="tab-units" class="tab-content" style="display:none">
+      <div class="converter-card">
+        <h2>🔬 Lab Unit Converter</h2>
+        <div class="subtitle">Convert between conventional (US) and SI units</div>
+        <div class="field" style="margin-bottom:16px">
+          <label>Select Analyte</label>
+          <select id="lab-analyte" onchange="updateLabFields()">
+            <option value="glucose">Glucose</option>
+            <option value="hba1c">HbA1c</option>
+            <option value="creatinine">Creatinine</option>
+            <option value="cholesterol">Total Cholesterol / LDL / HDL</option>
+            <option value="triglycerides">Triglycerides</option>
+            <option value="sodium">Sodium</option>
+            <option value="hemoglobin">Hemoglobin</option>
+            <option value="bilirubin">Bilirubin</option>
+            <option value="calcium">Calcium</option>
+            <option value="psa">PSA</option>
+          </select>
+        </div>
+        <div class="converter-grid">
+          <div class="field">
+            <label id="lab-from-label">mg/dL (Conventional)</label>
+            <input type="number" id="lab-from" placeholder="e.g. 100" oninput="convertLab('from')" />
+          </div>
+          <button class="swap-btn" onclick="swapLab()">⇄</button>
+          <div class="field">
+            <label id="lab-to-label">mmol/L (SI)</label>
+            <input type="number" id="lab-to" placeholder="Result" oninput="convertLab('to')" />
+          </div>
+        </div>
+        <div class="result-box" id="lab-result-box" style="display:none">
+          <div>
+            <div class="result-val" id="lab-result-val">—</div>
+            <div class="result-label" id="lab-result-label">Converted value</div>
+          </div>
+          <button class="copy-btn" onclick="copyResult('lab-result-val')">Copy</button>
+        </div>
+      </div>
+
+      <!-- Normal Ranges Reference -->
+      <div class="ref-card">
+        <h3>📊 Normal Lab Reference Ranges</h3>
+        <table>
+          <thead><tr><th>Test</th><th>Conventional</th><th>SI Units</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Glucose (fasting)</td><td>70–100 mg/dL</td><td>3.9–5.6 mmol/L</td><td><span class="badge badge-normal">Normal</span></td></tr>
+            <tr><td>HbA1c</td><td>&lt; 5.7%</td><td>&lt; 39 mmol/mol</td><td><span class="badge badge-normal">Normal</span></td></tr>
+            <tr><td>Creatinine (M)</td><td>0.7–1.3 mg/dL</td><td>62–115 µmol/L</td><td><span class="badge badge-normal">Normal</span></td></tr>
+            <tr><td>Cholesterol</td><td>&lt; 200 mg/dL</td><td>&lt; 5.2 mmol/L</td><td><span class="badge badge-normal">Normal</span></td></tr>
+            <tr><td>Hemoglobin (M)</td><td>13.5–17.5 g/dL</td><td>135–175 g/L</td><td><span class="badge badge-normal">Normal</span></td></tr>
+            <tr><td>Sodium</td><td>136–145 mEq/L</td><td>136–145 mmol/L</td><td><span class="badge badge-normal">Normal</span></td></tr>
+            <tr><td>Bilirubin (total)</td><td>0.2–1.2 mg/dL</td><td>3.4–20.5 µmol/L</td><td><span class="badge badge-normal">Normal</span></td></tr>
+            <tr><td>Calcium</td><td>8.5–10.5 mg/dL</td><td>2.1–2.6 mmol/L</td><td><span class="badge badge-normal">Normal</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ TAB: TEMPERATURE ══ -->
+    <div id="tab-temp" class="tab-content" style="display:none">
+      <div class="converter-card">
+        <h2>🌡️ Temperature Converter</h2>
+        <div class="subtitle">Celsius ↔ Fahrenheit ↔ Kelvin with clinical reference</div>
+        <div class="converter-grid">
+          <div class="field">
+            <label id="temp-from-label">Celsius (°C)</label>
+            <input type="number" id="temp-from" placeholder="e.g. 37.5" oninput="convertTemp('from')" step="0.1" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+            <button class="swap-btn" onclick="swapTemp()">⇄</button>
+          </div>
+          <div class="field">
+            <label id="temp-to-label">Fahrenheit (°F)</label>
+            <input type="number" id="temp-to" placeholder="Result" oninput="convertTemp('to')" step="0.1" />
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;max-width:200px">
+          <label>Convert to Kelvin also</label>
+          <input type="text" id="temp-kelvin" placeholder="K" readonly style="background:#f8fafc" />
+        </div>
+        <div class="result-box" id="temp-clinical" style="display:none;margin-top:20px;background:#fff8e1;border-color:#ffe082">
+          <div>
+            <div class="result-val" id="temp-status-val" style="color:#b45309">—</div>
+            <div class="result-label" id="temp-status-label">Clinical classification</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ref-card">
+        <h3>🩺 Clinical Temperature Reference</h3>
+        <table>
+          <thead><tr><th>Classification</th><th>°C</th><th>°F</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>Hypothermia (severe)</td><td>&lt; 32°C</td><td>&lt; 89.6°F</td><td>Emergency</td></tr>
+            <tr><td>Hypothermia (mild)</td><td>32–35°C</td><td>89.6–95°F</td><td>Warm & monitor</td></tr>
+            <tr><td>Normal</td><td>36.1–37.2°C</td><td>97–99°F</td><td>—</td></tr>
+            <tr><td>Low-grade fever</td><td>37.3–38°C</td><td>99.1–100.4°F</td><td>Monitor</td></tr>
+            <tr><td>Fever</td><td>38–39°C</td><td>100.4–102.2°F</td><td>Antipyretics</td></tr>
+            <tr><td>High fever</td><td>39–40°C</td><td>102.2–104°F</td><td>Investigate</td></tr>
+            <tr><td>Hyperpyrexia</td><td>&gt; 40°C</td><td>&gt; 104°F</td><td>Emergency</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ TAB: WEIGHT / HEIGHT ══ -->
+    <div id="tab-weight" class="tab-content" style="display:none">
+      <div class="converter-card">
+        <h2>⚖️ Weight & Height + BMI</h2>
+        <div class="subtitle">Convert units and calculate BMI instantly</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+          <div>
+            <div class="field" style="margin-bottom:10px">
+              <label>Weight (kg)</label>
+              <input type="number" id="w-kg" placeholder="70" oninput="syncWeight('kg')" step="0.1" />
+            </div>
+            <div class="field">
+              <label>Weight (lbs)</label>
+              <input type="number" id="w-lbs" placeholder="154" oninput="syncWeight('lbs')" step="0.1" />
+            </div>
+          </div>
+          <div>
+            <div class="field" style="margin-bottom:10px">
+              <label>Height (cm)</label>
+              <input type="number" id="h-cm" placeholder="170" oninput="syncHeight('cm')" step="0.5" />
+            </div>
+            <div class="field">
+              <label>Height (in)</label>
+              <input type="number" id="h-in" placeholder="66.9" oninput="syncHeight('in')" step="0.5" />
+            </div>
+          </div>
+        </div>
+        <button onclick="calcBMI()" style="padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s" onmouseover="this.style.opacity=.85" onmouseout="this.style.opacity=1">Calculate BMI</button>
+
+        <div class="dose-result" id="bmi-result" style="display:none;margin-top:20px">
+          <div class="dr-row">
+            <span class="dr-label">BMI</span>
+            <span class="dr-val" id="bmi-val">—</span>
+          </div>
+          <div class="dr-row">
+            <span class="dr-label">Classification</span>
+            <span class="dr-val" id="bmi-class">—</span>
+          </div>
+          <div class="dr-row">
+            <span class="dr-label">Ideal Weight Range</span>
+            <span class="dr-val" id="bmi-ideal">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: IV FLUID RATE ══ -->
+    <div id="tab-fluid" class="tab-content" style="display:none">
+      <div class="converter-card">
+        <h2>💧 IV Fluid Rate Calculator</h2>
+        <div class="subtitle">Calculate drip rates and infusion volumes</div>
+        <div class="dose-grid">
+          <div class="field">
+            <label>Volume (mL)</label>
+            <input type="number" id="iv-vol" placeholder="1000" oninput="calcIV()" />
+          </div>
+          <div class="field">
+            <label>Time (hours)</label>
+            <input type="number" id="iv-time" placeholder="8" oninput="calcIV()" />
+          </div>
+          <div class="field">
+            <label>Drop Factor (gtt/mL)</label>
+            <select id="iv-drop" onchange="calcIV()">
+              <option value="20">20 gtt/mL (standard)</option>
+              <option value="15">15 gtt/mL (blood)</option>
+              <option value="60">60 gtt/mL (microdrip)</option>
+              <option value="10">10 gtt/mL</option>
+            </select>
+          </div>
+        </div>
+        <div class="dose-result" id="iv-result" style="display:none;margin-top:20px">
+          <div class="dr-row">
+            <span class="dr-label">Flow Rate</span>
+            <span class="dr-val" id="iv-rate">—</span>
+          </div>
+          <div class="dr-row">
+            <span class="dr-label">Drops per minute</span>
+            <span class="dr-val" id="iv-gtt">—</span>
+          </div>
+          <div class="dr-row">
+            <span class="dr-label">Drops per second</span>
+            <span class="dr-val" id="iv-gtt-sec">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IN-FEED AD (300×250) — paste AdSense code here -->
+    <div class="ad-infeed">
+      <div class="ad-slot" style="height:250px">
+      <!-- EZOIC AD SLOT 2 — In-Feed. Replace id with your Ezoic placeholder ID -->
+    <div id="ezoic-pub-ad-placeholder-102" class="ad-slot" style="height:250px">
+      📋 Ad · In-Feed — Ezoic Slot 102
+    </div>
+    </div>
+
+  </main>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside>
+
+    <!-- SIDEBAR AD 1 (300×250) -->
+    <div class="sidebar-ad">
+      <div class="ad-slot" style="height:250px">
+      <!-- EZOIC AD SLOT 3 — Sidebar Top -->
+    <div id="ezoic-pub-ad-placeholder-103" class="ad-slot" style="height:250px">
+      📋 Ad · Sidebar — Ezoic Slot 103
+    </div>
+    </div>
+
+    <!-- TIPS CARD -->
+    <div class="tip-card">
+      <h4>🩺 Med Student Tips</h4>
+      <div class="tip-item"><span class="tip-icon">💡</span> <span>To convert mg/dL glucose → mmol/L: divide by 18</span></div>
+      <div class="tip-item"><span class="tip-icon">💡</span> <span>Normal body temp: 36.5–37.5°C (97.7–99.5°F)</span></div>
+      <div class="tip-item"><span class="tip-icon">💡</span> <span>1 kg ≈ 2.2 lbs. Always use kg for drug dosing.</span></div>
+      <div class="tip-item"><span class="tip-icon">💡</span> <span>Maintenance fluid rate (Holliday-Segar): 4 mL/kg/hr for first 10 kg</span></div>
+      <div class="tip-item"><span class="tip-icon">💡</span> <span>GFR &lt; 60 mL/min/1.73m² for &gt; 3 months = CKD</span></div>
+    </div>
+
+    <!-- SIDEBAR AD 2 (300×600) -->
+    <div class="sidebar-ad2">
+      <div class="ad-slot" style="height:600px">
+      <!-- EZOIC AD SLOT 4 — Sidebar Large (highest CPM) -->
+    <div id="ezoic-pub-ad-placeholder-104" class="ad-slot" style="height:600px">
+      📋 Ad · Sidebar Large — Ezoic Slot 104
+    </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- FOOTER AD -->
+<div style="padding:16px 24px;background:var(--surface);border-top:1px solid var(--border);text-align:center">
+  <div class="ad-slot" style="height:90px;max-width:728px;margin:0 auto">
+  <!-- EZOIC AD SLOT 5 — Footer Banner -->
+  <div id="ezoic-pub-ad-placeholder-105" class="ad-slot" style="height:90px;max-width:728px;margin:0 auto">
+    📋 Ad · Footer Banner — Ezoic Slot 105
+  </div>
+</div>
+
+<footer>
+  <strong>MedConvert</strong> — Free medical unit converter for students & clinicians<br>
+  <span style="margin-top:6px;display:block">⚠️ For educational use only. Not a substitute for clinical judgment. Always verify calculations.</span>
+  <span style="margin-top:6px;display:block">© 2026 MedConvert · Privacy Policy · Contact</span>
+</footer>
+
+<script>
+  /* ── TAB SWITCHING ── */
+  function showTab(name, el) {
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).style.display = 'block';
+    el.classList.add('active');
+  }
+
+  /* ── DRUG DOSING ── */
+  function calcDose() {
+    let w = parseFloat(document.getElementById('dose-weight').value);
+    const wUnit = document.getElementById('dose-weight-unit').value;
+    const dose = parseFloat(document.getElementById('dose-amt').value);
+    const unit = document.getElementById('dose-unit').value;
+    const freq = parseFloat(document.getElementById('dose-freq').value) || 1;
+    if (!w || !dose) { document.getElementById('dose-result').style.display = 'none'; return; }
+    if (wUnit === 'lbs') w = w / 2.2046;
+    const totalDose = dose * w;
+    const perDose = unit.includes('/day') ? (totalDose / freq) : totalDose;
+    const baseUnit = unit.replace('/kg','').replace('/day','');
+    document.getElementById('dr-total').textContent = totalDose.toFixed(2) + ' ' + baseUnit.replace('/kg','') + (unit.includes('/day') ? '/day' : '');
+    document.getElementById('dr-per').textContent = unit.includes('/day') ? (perDose.toFixed(2) + ' ' + baseUnit + ' per dose') : '—';
+    document.getElementById('dr-weight').textContent = w.toFixed(1) + ' kg';
+    document.getElementById('dose-result').style.display = 'block';
+  }
+
+  /* ── LAB CONVERTER ── */
+  const labData = {
+    glucose:      { from: 'mg/dL (Conventional)', to: 'mmol/L (SI)', factor: 1/18.015, ref: 'Normal fasting: 70–100 mg/dL / 3.9–5.6 mmol/L' },
+    hba1c:        { from: '% (NGSP/DCCT)', to: 'mmol/mol (IFCC)', factor: null, ref: 'Use formula: mmol/mol = (% − 2.15) × 10.929' },
+    creatinine:   { from: 'mg/dL', to: 'µmol/L (SI)', factor: 88.4, ref: 'Normal: 0.7–1.3 mg/dL (M), 0.6–1.1 mg/dL (F)' },
+    cholesterol:  { from: 'mg/dL', to: 'mmol/L', factor: 1/38.67, ref: 'Desirable: < 200 mg/dL / < 5.17 mmol/L' },
+    triglycerides:{ from: 'mg/dL', to: 'mmol/L', factor: 1/88.57, ref: 'Normal: < 150 mg/dL / < 1.7 mmol/L' },
+    sodium:       { from: 'mEq/L', to: 'mmol/L (same)', factor: 1, ref: 'Normal: 136–145 mEq/L ≡ mmol/L' },
+    hemoglobin:   { from: 'g/dL', to: 'g/L', factor: 10, ref: 'Normal M: 13.5–17.5 g/dL, F: 12–16 g/dL' },
+    bilirubin:    { from: 'mg/dL', to: 'µmol/L', factor: 17.1, ref: 'Normal total: 0.2–1.2 mg/dL / 3.4–20.5 µmol/L' },
+    calcium:      { from: 'mg/dL', to: 'mmol/L', factor: 0.2495, ref: 'Normal: 8.5–10.5 mg/dL / 2.1–2.6 mmol/L' },
+    psa:          { from: 'ng/mL (µg/L)', to: 'µg/L (same)', factor: 1, ref: 'Normal < 4 ng/mL (age-dependent)' },
+  };
+  let labDir = 'from';
+  function updateLabFields() {
+    const d = labData[document.getElementById('lab-analyte').value];
+    document.getElementById('lab-from-label').textContent = d.from;
+    document.getElementById('lab-to-label').textContent = d.to;
+    document.getElementById('lab-from').value = '';
+    document.getElementById('lab-to').value = '';
+    document.getElementById('lab-result-box').style.display = 'none';
+  }
+  function convertLab(dir) {
+    labDir = dir;
+    const analyte = document.getElementById('lab-analyte').value;
+    const d = labData[analyte];
+    if (!d.factor) {
+      if (analyte === 'hba1c') {
+        const pct = parseFloat(document.getElementById('lab-from').value);
+        if (!isNaN(pct)) {
+          const mmol = ((pct - 2.15) * 10.929).toFixed(1);
+          document.getElementById('lab-to').value = mmol;
+          showLabResult(mmol + ' mmol/mol', d.ref); return;
+        }
+      }
+      return;
+    }
+    if (dir === 'from') {
+      const val = parseFloat(document.getElementById('lab-from').value);
+      if (isNaN(val)) return;
+      const res = (val * d.factor).toFixed(3);
+      document.getElementById('lab-to').value = res;
+      showLabResult(res + ' ' + d.to, d.ref);
+    } else {
+      const val = parseFloat(document.getElementById('lab-to').value);
+      if (isNaN(val)) return;
+      const res = (val / d.factor).toFixed(2);
+      document.getElementById('lab-from').value = res;
+      showLabResult(res + ' ' + d.from, d.ref);
+    }
+  }
+  function showLabResult(val, ref) {
+    document.getElementById('lab-result-val').textContent = val;
+    document.getElementById('lab-result-label').textContent = ref;
+    document.getElementById('lab-result-box').style.display = 'flex';
+  }
+  function swapLab() {
+    const fl = document.getElementById('lab-from').value;
+    const tl = document.getElementById('lab-to').value;
+    document.getElementById('lab-from').value = tl;
+    document.getElementById('lab-to').value = fl;
+  }
+
+  /* ── TEMPERATURE ── */
+  function convertTemp(dir) {
+    const fl = document.getElementById('temp-from-label').textContent;
+    let c, f;
+    if (dir === 'from') {
+      const v = parseFloat(document.getElementById('temp-from').value);
+      if (isNaN(v)) return;
+      if (fl.includes('°C')) { c = v; f = c * 9/5 + 32; }
+      else { f = v; c = (f - 32) * 5/9; }
+      document.getElementById('temp-to').value = (fl.includes('°C') ? f : c).toFixed(1);
+    } else {
+      const v = parseFloat(document.getElementById('temp-to').value);
+      if (isNaN(v)) return;
+      if (fl.includes('°C')) { f = v; c = (f - 32) * 5/9; }
+      else { c = v; f = c * 9/5 + 32; }
+      document.getElementById('temp-from').value = (fl.includes('°C') ? c : f).toFixed(1);
+    }
+    document.getElementById('temp-kelvin').value = (c + 273.15).toFixed(2) + ' K';
+    // Clinical classification
+    let status = '', color = 'var(--accent)';
+    if (c < 32) { status = '🚨 Severe Hypothermia'; color = '#1d4ed8'; }
+    else if (c < 35) { status = '🥶 Mild Hypothermia'; color = '#3b82f6'; }
+    else if (c <= 37.2) { status = '✅ Normal Temperature'; color = 'var(--accent2)'; }
+    else if (c <= 38) { status = '🌡 Low-grade Fever'; color = '#f59e0b'; }
+    else if (c <= 39) { status = '🔥 Fever'; color = '#f97316'; }
+    else if (c <= 40) { status = '⚠️ High Fever'; color = '#ef4444'; }
+    else { status = '🚨 Hyperpyrexia — Emergency'; color = '#991b1b'; }
+    document.getElementById('temp-status-val').textContent = status;
+    document.getElementById('temp-status-val').style.color = color;
+    document.getElementById('temp-clinical').style.display = 'flex';
+  }
+  function swapTemp() {
+    const fl = document.getElementById('temp-from-label');
+    const tl = document.getElementById('temp-to-label');
+    const fv = document.getElementById('temp-from').value;
+    const tv = document.getElementById('temp-to').value;
+    [fl.textContent, tl.textContent] = [tl.textContent, fl.textContent];
+    document.getElementById('temp-from').value = tv;
+    document.getElementById('temp-to').value = fv;
+  }
+
+  /* ── WEIGHT / BMI ── */
+  function syncWeight(from) {
+    if (from === 'kg') {
+      const kg = parseFloat(document.getElementById('w-kg').value);
+      if (!isNaN(kg)) document.getElementById('w-lbs').value = (kg * 2.2046).toFixed(1);
+    } else {
+      const lbs = parseFloat(document.getElementById('w-lbs').value);
+      if (!isNaN(lbs)) document.getElementById('w-kg').value = (lbs / 2.2046).toFixed(1);
+    }
+  }
+  function syncHeight(from) {
+    if (from === 'cm') {
+      const cm = parseFloat(document.getElementById('h-cm').value);
+      if (!isNaN(cm)) document.getElementById('h-in').value = (cm / 2.54).toFixed(1);
+    } else {
+      const inches = parseFloat(document.getElementById('h-in').value);
+      if (!isNaN(inches)) document.getElementById('h-cm').value = (inches * 2.54).toFixed(1);
+    }
+  }
+  function calcBMI() {
+    const kg = parseFloat(document.getElementById('w-kg').value);
+    const cm = parseFloat(document.getElementById('h-cm').value);
+    if (!kg || !cm) return;
+    const hm = cm / 100;
+    const bmi = (kg / (hm * hm)).toFixed(1);
+    let cls = '', color = 'var(--accent2)';
+    if (bmi < 18.5) { cls = 'Underweight'; color = '#3b82f6'; }
+    else if (bmi < 25) { cls = 'Normal weight'; color = 'var(--accent2)'; }
+    else if (bmi < 30) { cls = 'Overweight'; color = '#f59e0b'; }
+    else if (bmi < 35) { cls = 'Obese Class I'; color = '#f97316'; }
+    else if (bmi < 40) { cls = 'Obese Class II'; color = '#ef4444'; }
+    else { cls = 'Obese Class III'; color = '#991b1b'; }
+    const idealLow = (18.5 * hm * hm).toFixed(1);
+    const idealHigh = (24.9 * hm * hm).toFixed(1);
+    document.getElementById('bmi-val').textContent = bmi + ' kg/m²';
+    document.getElementById('bmi-class').textContent = cls;
+    document.getElementById('bmi-class').style.color = color;
+    document.getElementById('bmi-ideal').textContent = idealLow + ' – ' + idealHigh + ' kg';
+    document.getElementById('bmi-result').style.display = 'block';
+  }
+
+  /* ── IV FLUID ── */
+  function calcIV() {
+    const vol = parseFloat(document.getElementById('iv-vol').value);
+    const hrs = parseFloat(document.getElementById('iv-time').value);
+    const drop = parseFloat(document.getElementById('iv-drop').value);
+    if (!vol || !hrs) { document.getElementById('iv-result').style.display = 'none'; return; }
+    const rate = vol / hrs;
+    const gttMin = (vol * drop) / (hrs * 60);
+    const gttSec = gttMin / 60;
+    document.getElementById('iv-rate').textContent = rate.toFixed(1) + ' mL/hr';
+    document.getElementById('iv-gtt').textContent = gttMin.toFixed(1) + ' gtt/min';
+    document.getElementById('iv-gtt-sec').textContent = gttSec.toFixed(2) + ' gtt/sec';
+    document.getElementById('iv-result').style.display = 'block';
+  }
+
+  /* ── COPY ── */
+  function copyResult(id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.target;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  }
+
+  // init
+  updateLabFields();
+</script>
+</body>
+</html>

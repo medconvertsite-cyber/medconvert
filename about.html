@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — MedConvert</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f7fa; --surface: #ffffff; --border: #e2e8f0;
+      --text: #1a202c; --muted: #64748b; --accent: #0a5c8a;
+      --accent2: #06785c; --accent-light: #e8f4fd; --radius: 12px;
+      --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 20px rgba(0,0,0,0.04);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.7; }
+    header {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 24px; display: flex; align-items: center;
+      justify-content: space-between; height: 60px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; }
+    .logo-text { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); }
+    .logo-text span { color: var(--accent2); }
+    nav a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; margin-left: 24px; }
+    nav a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, #0e7490 100%);
+      color: #fff;
+      text-align: center;
+      padding: 72px 24px;
+    }
+    .hero h1 { font-family: 'DM Serif Display', serif; font-size: 40px; margin-bottom: 14px; }
+    .hero p { font-size: 16px; opacity: .85; max-width: 540px; margin: 0 auto; line-height: 1.7; }
+
+    .wrap { max-width: 900px; margin: 0 auto; padding: 48px 20px 60px; }
+
+    /* CARDS */
+    .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 36px; margin-bottom: 24px; }
+    h2 { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--accent); margin-bottom: 14px; }
+    p { color: #374151; margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* FEATURES GRID */
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .feature {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      text-align: center;
+    }
+    .feature .icon { font-size: 32px; margin-bottom: 12px; }
+    .feature h3 { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--accent); margin-bottom: 8px; }
+    .feature p { font-size: 13px; color: var(--muted); margin: 0; }
+
+    /* MISSION STRIP */
+    .mission {
+      background: var(--accent-light);
+      border: 1.5px solid #bee3f8;
+      border-radius: var(--radius);
+      padding: 28px 36px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .mission .m-icon { font-size: 36px; flex-shrink: 0; }
+    .mission h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); margin-bottom: 8px; }
+    .mission p { color: #374151; font-size: 14px; margin: 0; }
+
+    /* DISCLAIMER */
+    .disclaimer-box { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; color: #6d4c00; line-height: 1.6; }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+    .contact-item { background: var(--bg); border-radius: 10px; padding: 18px; border: 1px solid var(--border); }
+    .contact-item .ci-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+    .contact-item .ci-val { font-size: 14px; color: var(--accent); font-weight: 500; }
+
+    a { color: var(--accent); }
+    footer { text-align: center; padding: 24px; color: #94a3b8; font-size: 12px; border-top: 1px solid var(--border); }
+
+    @media (max-width: 640px) {
+      .features { grid-template-columns: 1fr 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .mission { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">⚕</div>
+    <div class="logo-text">Med<span>Convert</span></div>
+  </a>
+  <nav>
+    <a href="index.html">Converters</a>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Built by a Med Student,<br>for Med Students</h1>
+  <p>MedConvert started as a frustration with constantly switching between apps and textbooks just to do basic clinical calculations.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- MISSION -->
+  <div class="mission">
+    <div class="m-icon">🎯</div>
+    <div>
+      <h3>Our Mission</h3>
+      <p>To provide free, fast, and accurate medical calculators and unit converters that help students and clinicians spend less time on arithmetic and more time on patient care. Every tool on MedConvert is built with clinical accuracy in mind and verified against standard medical references.</p>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="feature">
+      <div class="icon">💊</div>
+      <h3>Drug Dosing</h3>
+      <p>Weight-based dosing calculations with paediatric reference tables</p>
+    </div>
+    <div class="feature">
+      <div class="icon">🔬</div>
+      <h3>Lab Units</h3>
+      <p>Convert between SI and conventional units for 10+ common analytes</p>
+    </div>
+    <div class="feature">
+      <div class="icon">🌡️</div>
+      <h3>Temperature</h3>
+      <p>°C ↔ °F ↔ K with instant clinical classification</p>
+    </div>
+    <div class="feature">
+      <div class="icon">⚖️</div>
+      <h3>Weight & BMI</h3>
+      <p>kg/lbs conversion plus BMI with WHO classification</p>
+    </div>
+    <div class="feature">
+      <div class="icon">💧</div>
+      <h3>IV Fluid Rate</h3>
+      <p>Drip rate and gtt/min calculator for IV infusions</p>
+    </div>
+    <div class="feature">
+      <div class="icon">📋</div>
+      <h3>Reference Tables</h3>
+      <p>Quick-access normal ranges and common dose guides</p>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="card">
+    <h2>About This Site</h2>
+    <p>MedConvert was created by a medical student who was tired of Googling conversion factors mid-ward round. The goal was simple: one clean, mobile-friendly page with all the conversions you actually need during clinical training.</p>
+    <p>All calculations run entirely in your browser — nothing you type is ever sent to a server. The site is free to use and always will be. It's supported by advertising, which helps cover hosting and development costs.</p>
+    <p>We update our reference values based on the latest guidelines from WHO, BNF, and major clinical pharmacology references.</p>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer-box">
+    ⚠️ <strong>Medical Disclaimer:</strong> MedConvert is intended for educational purposes only. All calculators and reference values are provided as a convenience tool and should never replace clinical judgment, institutional protocols, or verified pharmacological references. Always cross-check critical calculations with your hospital pharmacy or a qualified prescriber before administration to patients.
+  </div>
+
+  <!-- CONTACT -->
+  <div class="card">
+    <h2>Get in Touch</h2>
+    <p>Found a bug, an outdated reference value, or want to suggest a new converter? We'd love to hear from you.</p>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-label">General Enquiries</div>
+        <div class="ci-val">📧 hello@medconvert.io</div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-label">Privacy & Data</div>
+        <div class="ci-val">📧 privacy@medconvert.io</div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-label">Report an Error</div>
+        <div class="ci-val">📧 corrections@medconvert.io</div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-label">Advertising</div>
+        <div class="ci-val">📧 ads@medconvert.io</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 MedConvert · <a href="privacy.html">Privacy Policy</a> · <a href="about.html">About</a></footer>
+
+</body>
+</html>
